@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 # =========================================================
 # 1) CONFIG + BRANDING
 # =========================================================
-st.set_page_config(page_title="Dashboard AI‑LLIU | MASXXI", page_icon="🦋", layout="wide")
+st.set_page_config(page_title="Dashboard AI‑LLIU | MASXXI ", page_icon="🦋", layout="wide")
 
 DATA_DIR = "data"
 TASA_USD_CLP = 950
