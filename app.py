@@ -23,12 +23,10 @@ st.set_page_config(
 
 DATA_DIR = "data"
 DEFAULT_USDCLP = 950.0
+APP_VERSION = "v3.2 - tokens unificados"
 
 URL_LOGO = "https://i.ibb.co/YqVrvwS/Recurso-2.png"
-COLOR_PRIMARIO = "#0E116A"
-COLOR_ACENTO = "#CEDF74"
 COLOR_TEXTO = "#1A1A1A"
-COLOR_FONDO = "#F4F5F2"
 
 PLOT_LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
@@ -59,6 +57,17 @@ html, body, [class*="css"] {
 }
 @media (max-width: 1200px){ .block-container{ max-width: 1000px; } }
 @media (max-width: 900px){ .block-container{ max-width: 92vw; } }
+
+.version-pill{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#EAF2FF;
+  color:#0E116A;
+  font-weight:700;
+  font-size:0.9rem;
+  margin-bottom:0.8rem;
+}
 
 .ai-header{
   display:flex;
@@ -366,6 +375,55 @@ def render_destacado_card(titulo: str, subtitulo: str, row: pd.Series):
     )
 
 
+def estimate_tokens_from_text(text: str) -> int:
+    if not text:
+        return 0
+    text = str(text)
+    chars_estimate = len(text) / 4.0
+    words = re.findall(r"\S+", text)
+    words_estimate = len(words) * 1.3
+    return int(round(max(chars_estimate, words_estimate)))
+
+
+def extract_text_candidates(item: dict) -> str:
+    candidates = []
+
+    top_level_keys = [
+        "Title", "title", "Prompt", "prompt", "Input", "input",
+        "Output", "output", "Response", "response",
+        "Content", "content", "Body", "body",
+        "Question", "question", "Answer", "answer",
+        "UserMessage", "user_message", "AssistantMessage", "assistant_message",
+        "Message", "message", "Text", "text"
+    ]
+
+    for key in top_level_keys:
+        value = item.get(key)
+        if value is not None and str(value).strip() not in ("", "null", "None"):
+            candidates.append(str(value))
+
+    payload_keys = ["Payload", "payload", "Data", "data", "Messages", "messages"]
+    for key in payload_keys:
+        value = item.get(key)
+        if value is None:
+            continue
+        try:
+            if isinstance(value, str):
+                candidates.append(value)
+            else:
+                candidates.append(json.dumps(value, ensure_ascii=False))
+        except Exception:
+            candidates.append(str(value))
+
+    if not candidates:
+        try:
+            candidates.append(json.dumps(item, ensure_ascii=False))
+        except Exception:
+            candidates.append(str(item))
+
+    return " ".join(candidates).strip()
+
+
 # =========================================================
 # CARGA DE DATOS
 # =========================================================
@@ -403,15 +461,19 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
             except Exception:
                 total_price_usd = 0.0
 
-            tokens = item.get("TotalTokens", None)
+            raw_tokens = item.get("TotalTokens", None)
             try:
-                tokens = int(tokens) if tokens not in (None, "", "null") else np.nan
+                raw_tokens = int(raw_tokens) if raw_tokens not in (None, "", "null") else 0
             except Exception:
-                tokens = np.nan
+                raw_tokens = 0
 
             create_ms = item.get("CreateTime")
             fecha_utc = pd.to_datetime(int(create_ms), unit="ms", utc=True) if create_ms else pd.NaT
             title = item.get("Title", "") or ""
+
+            text_blob = extract_text_candidates(item)
+            estimated_tokens = estimate_tokens_from_text(text_blob)
+            final_tokens = raw_tokens if raw_tokens > 0 else estimated_tokens
 
             records.append(
                 {
@@ -420,7 +482,8 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
                     "Titulo": title,
                     "Asignatura": inferir_asignatura(title),
                     "TotalPriceUSD": total_price_usd,
-                    "Tokens": tokens,
+                    "Tokens": final_tokens,
+                    "Texto_Base": text_blob,
                 }
             )
 
@@ -463,7 +526,10 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
         df_master = df_conv.copy()
         if df_master.empty:
             df_master = pd.DataFrame(
-                columns=["UserId", "Fecha_Local", "Fecha_Dia", "Mes", "Titulo", "Asignatura", "TotalPriceUSD", "Tokens"]
+                columns=[
+                    "UserId", "Fecha_Local", "Fecha_Dia", "Mes", "Titulo", "Asignatura",
+                    "TotalPriceUSD", "Tokens", "Texto_Base"
+                ]
             )
         df_master["region"] = df_master.get("region", "Desconocida")
         df_master["inst_clean"] = df_master.get("inst_clean", "NO ESPECIFICADO")
@@ -480,6 +546,8 @@ df_master, df_users = load_data()
 # =========================================================
 # ENCABEZADO
 # =========================================================
+st.markdown(f'<div class="version-pill">{APP_VERSION}</div>', unsafe_allow_html=True)
+
 st.markdown(
     f"""
 <div class="ai-header">
@@ -658,6 +726,8 @@ prom_mensual_total = costo_total_rango / max(1, meses_en_rango)
 prom_mensual_api = costo_api_total / max(1, meses_en_rango)
 costo_por_humano_rango = costo_total_rango / max(1, usuarios_humanos)
 
+tokens_total = int(df["Tokens"].sum())
+
 # =========================================================
 # 1) KPIs GENERALES
 # =========================================================
@@ -680,14 +750,14 @@ st.markdown(
     <div class="hint">Registros del datadump en el rango</div>
   </div>
   <div class="kpi">
+    <div class="label">Tokens</div>
+    <div class="value">{fmt_compact(tokens_total)}</div>
+    <div class="hint">Tokens acumulados finales</div>
+  </div>
+  <div class="kpi">
     <div class="label">Costo mensual promedio (total)</div>
     <div class="value">{fmt_clp(prom_mensual_total)}</div>
     <div class="hint">API (variable) + infraestructura (fijo)</div>
-  </div>
-  <div class="kpi">
-    <div class="label">Costo mensual promedio (API)</div>
-    <div class="value">{fmt_clp(prom_mensual_api)}</div>
-    <div class="hint">Estimación desde TotalPrice (USD)</div>
   </div>
   <div class="kpi">
     <div class="label">Costo por usuario humano (período)</div>
@@ -758,20 +828,9 @@ with u3:
     st.plotly_chart(fig_h, use_container_width=True)
 
 with u4:
-    asig_top = (
-        df.groupby("Asignatura")
-        .size()
-        .reset_index(name="interacciones")
-        .sort_values("interacciones", ascending=False)
-    )
-    fig_asig_top = px.bar(
-        asig_top,
-        x="Asignatura",
-        y="interacciones",
-        title="Distribución general por asignatura"
-    )
-    fig_asig_top.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
-    st.plotly_chart(fig_asig_top, use_container_width=True)
+    tokens_by_month = monthly.set_index("Mes")[["tokens"]]
+    st.markdown("**Tokens por mes**")
+    st.line_chart(tokens_by_month)
 
 # =========================================================
 # 3) COSTOS
@@ -993,7 +1052,7 @@ else:
 st.markdown("### Resumen mensual")
 
 table = monthly.copy()
-for c in ["costo_api", "costo_infra", "costo_total", "costo_por_humano"]:
+for c in ["costo_api", "costo_infra", "costo_total", "costo_por_humano", "tokens"]:
     table[c] = table[c].round(0)
 
 table = table.rename(
@@ -1002,6 +1061,7 @@ table = table.rename(
         "interacciones": "Interacciones",
         "usuarios_activos": "Usuarios activos",
         "usuarios_humanos": "Usuarios humanos",
+        "tokens": "Tokens",
         "costo_api": "Costo API (CLP)",
         "costo_infra": "Costo infraestructura (CLP)",
         "costo_total": "Costo total (CLP)",
@@ -1011,7 +1071,9 @@ table = table.rename(
 st.dataframe(table, use_container_width=True)
 
 st.caption(
-    "Definiciones: 'Costo API' se estima desde TotalPrice (USD) convertido a CLP. "
+    "Definiciones: 'Tokens' corresponde a tokens acumulados finales; "
+    "si TotalTokens existe y es mayor que cero se usa, y si no existe se estima desde texto del registro. "
+    "'Costo API' se estima desde TotalPrice (USD) convertido a CLP. "
     "'Costo infraestructura' corresponde a un componente fijo mensual parametrizable. "
     "'Usuarios humanos validados' aplica reglas de depuración (emails de prueba, verificación y umbrales de actividad). "
     "'Nombre visible' prioriza nombre explícito en la data; si no existe, usa el nickname derivado del correo; si tampoco existe, asigna un alias sintético."
