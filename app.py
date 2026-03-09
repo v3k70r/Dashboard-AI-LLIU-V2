@@ -24,7 +24,6 @@ st.set_page_config(
 DATA_DIR = "data"
 DEFAULT_USDCLP = 950.0
 
-# Branding (AI-LLIU)
 URL_LOGO = "https://i.ibb.co/YqVrvwS/Recurso-2.png"
 COLOR_PRIMARIO = "#0E116A"
 COLOR_ACENTO = "#CEDF74"
@@ -34,38 +33,50 @@ COLOR_FONDO = "#F4F5F2"
 PLOT_LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="Montserrat, system-ui, -apple-system, Segoe UI, Roboto", color=COLOR_TEXTO),
+    font=dict(
+        family="Montserrat, system-ui, -apple-system, Segoe UI, Roboto",
+        color=COLOR_TEXTO,
+    ),
     margin=dict(l=0, r=0, t=40, b=0),
 )
 
 
 # =========================================================
-# ESTILOS (ENCADRE + CONTRASTE TAGS EN CHROME/MAC)
+# ESTILOS
 # =========================================================
 CSS = """
 <style>
-/* Base */
-html, body, [class*="css"] { font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto !important; }
+html, body, [class*="css"] {
+  font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto !important;
+}
 .stApp { background: #F4F5F2; }
 
-/* Evita overflow horizontal */
 [data-testid="stAppViewContainer"] { overflow-x: hidden !important; }
-.block-container { padding-top: 1rem; padding-bottom: 2rem; max-width: 1280px; }
+.block-container {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  max-width: 1280px;
+}
 @media (max-width: 1200px){ .block-container{ max-width: 1000px; } }
 @media (max-width: 900px){ .block-container{ max-width: 92vw; } }
 
-/* Header */
 .ai-header{
-  display:flex; align-items:center; gap:14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
   margin: 4px 0 10px 0;
 }
 .ai-header img{ height:40px; }
 .ai-header .title{
-  font-size: 22px; font-weight: 800; color:#0E116A;
+  font-size: 22px;
+  font-weight: 800;
+  color:#0E116A;
 }
-.ai-sub{ color: rgba(26,26,26,.75); margin-top:-6px; }
+.ai-sub{
+  color: rgba(26,26,26,.75);
+  margin-top:-6px;
+}
 
-/* KPI grid (responsivo + anti-desborde) */
 .kpi-grid{
   display:grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -76,26 +87,48 @@ html, body, [class*="css"] { font-family: Montserrat, system-ui, -apple-system, 
 @media (max-width: 700px){ .kpi-grid{ grid-template-columns: repeat(1, minmax(0, 1fr)); } }
 
 .kpi{
-  background:#FFFFFF; border:1px solid rgba(14,17,106,0.10);
-  border-radius:16px; padding:14px 14px;
-  min-width: 0; /* clave: evita desborde dentro del grid */
+  background:#FFFFFF;
+  border:1px solid rgba(14,17,106,0.10);
+  border-radius:16px;
+  padding:14px 14px;
+  min-width: 0;
 }
 .kpi .label{
   color: rgba(26,26,26,.70);
-  font-weight:650; font-size:13px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-weight:650;
+  font-size:13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .kpi .value{
-  color:#0E116A; font-weight:900; font-size:32px; line-height:1.05;
+  color:#0E116A;
+  font-weight:900;
+  font-size:32px;
+  line-height:1.05;
   margin-top:2px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .kpi .hint{
-  color: rgba(26,26,26,.68); font-size:12px; margin-top:6px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: rgba(26,26,26,.68);
+  font-size:12px;
+  margin-top:6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Sidebar */
+.profile-card{
+  background:#FFFFFF;
+  border:1px solid rgba(14,17,106,0.10);
+  border-radius:16px;
+  padding:14px 16px;
+  min-width:0;
+  margin-bottom: 10px;
+}
+
 section[data-testid="stSidebar"]{
   background: linear-gradient(180deg, rgba(14,17,106,0.06) 0%, rgba(206,223,116,0.10) 100%) !important;
   border-right: 1px solid rgba(14,17,106,0.10) !important;
@@ -104,7 +137,6 @@ section[data-testid="stSidebar"] > div{ padding-top: 14px !important; }
 section[data-testid="stSidebar"] .stMarkdown h2,
 section[data-testid="stSidebar"] .stMarkdown h3{ color: #0E116A !important; }
 
-/* Inputs */
 section[data-testid="stSidebar"] div[data-baseweb="select"] > div{
   background: rgba(255,255,255,0.92) !important;
   border: 1px solid rgba(14,17,106,0.16) !important;
@@ -115,7 +147,6 @@ section[data-testid="stSidebar"] div[data-baseweb="select"] > div:focus-within{
   box-shadow: 0 0 0 3px rgba(206,223,116,0.35) !important;
 }
 
-/* Tags: fuerza contraste (Chrome/Mac) */
 section[data-testid="stSidebar"] [data-baseweb="tag"]{
   background-color: #CEDF74 !important;
   background: #CEDF74 !important;
@@ -127,8 +158,9 @@ section[data-testid="stSidebar"] [data-baseweb="tag"] *{
   fill: #0E116A !important;
 }
 
-/* Evita que plotly “se salga” */
-.js-plotly-plot, .plot-container { max-width: 100% !important; }
+.js-plotly-plot, .plot-container {
+  max-width: 100% !important;
+}
 </style>
 """
 st.markdown(CSS, unsafe_allow_html=True)
@@ -157,6 +189,12 @@ def fmt_clp(n: float) -> str:
         return f"${int(round(float(n))):,} CLP".replace(",", ".")
     except Exception:
         return "$0 CLP"
+
+
+def safe_text(x, fallback="No disponible"):
+    if pd.isna(x) or str(x).strip() == "":
+        return fallback
+    return str(x)
 
 
 def limpiar_institucion(inst) -> str:
@@ -210,10 +248,6 @@ def inferir_asignatura(titulo: str) -> str:
 
 
 def ensure_full_json(data_dir: str) -> str:
-    """
-    Reconstruye data/full_conversations.json desde partes .part### (<=100MB).
-    Mantiene compatibilidad si las partes vienen con otro prefijo (ConversationTable...partX).
-    """
     os.makedirs(data_dir, exist_ok=True)
     out_file = os.path.join(data_dir, "full_conversations.json")
     if os.path.exists(out_file) and os.path.getsize(out_file) > 0:
@@ -240,6 +274,98 @@ def is_test_email(email: str) -> bool:
     return any(b in e for b in bad)
 
 
+def horario_predominante(series_franja: pd.Series) -> str:
+    if series_franja.empty:
+        return "No determinado"
+    return series_franja.value_counts().idxmax()
+
+
+def asignatura_predominante(series_asig: pd.Series) -> str:
+    if series_asig.empty:
+        return "No determinada"
+    return series_asig.value_counts().idxmax()
+
+
+def clasificar_perfil_usuario(row) -> str:
+    conv = row.get("conv", 0)
+    tokens = row.get("tokens", 0) or 0
+    dias_activos = row.get("dias_activos", 0)
+    meses_activos = row.get("meses_activos", 0)
+
+    if conv >= 20 and meses_activos >= 3:
+        return "Usuario recurrente"
+    if tokens >= 30000 and conv >= 5:
+        return "Usuario intensivo"
+    if conv <= 3 and dias_activos <= 2:
+        return "Usuario exploratorio"
+    if dias_activos >= 8 and conv >= 8:
+        return "Usuario constante"
+    return "Usuario intermedio"
+
+
+def construir_nombre_visible(row, alias_index=None) -> str:
+    possible_name_fields = [
+        "name", "Name", "full_name", "FullName",
+        "display_name", "DisplayName",
+        "given_name", "family_name",
+        "nombre", "Nombre"
+    ]
+
+    for field in possible_name_fields:
+        if field in row and pd.notna(row[field]) and str(row[field]).strip() != "":
+            value = str(row[field]).strip()
+            if field in ["given_name", "family_name"]:
+                continue
+            return value
+
+    given = str(row.get("given_name", "")).strip() if "given_name" in row else ""
+    family = str(row.get("family_name", "")).strip() if "family_name" in row else ""
+    combined = f"{given} {family}".strip()
+    if combined:
+        return combined
+
+    email = str(row.get("email", "")).strip()
+    if "@" in email:
+        local = email.split("@", 1)[0].strip()
+        if local:
+            return local
+
+    if alias_index is None:
+        return "usuario_000"
+    return f"usuario_{int(alias_index):03d}"
+
+
+def render_destacado_card(titulo: str, subtitulo: str, row: pd.Series):
+    st.markdown(
+        f"""
+        <div class="profile-card">
+          <div class="label" style="font-weight:700;color:#0E116A;">{titulo}</div>
+          <div class="value" style="font-size:24px;margin-top:4px;color:#0E116A;font-weight:800;">
+            {safe_text(row.get("nombre_visible"))}
+          </div>
+          <div class="hint" style="margin-top:6px;">{subtitulo}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.write(
+        f"""
+**Perfil inferido:** {safe_text(row.get("perfil_uso"))}  
+**Rol:** {safe_text(row.get("rol_mostrado"))}  
+**Institución:** {safe_text(row.get("inst_mostrada"))}  
+**Región:** {safe_text(row.get("region_mostrada"))}  
+**Asignatura principal:** {safe_text(row.get("asignatura_principal"))}  
+**Franja predominante:** {safe_text(row.get("franja_predominante"))}  
+**Interacciones:** {int(row.get("conv", 0))}  
+**Días activos:** {int(row.get("dias_activos", 0))}  
+**Meses activos:** {int(row.get("meses_activos", 0))}  
+**Tokens acumulados:** {fmt_compact(row.get("tokens", 0) or 0)}  
+**Costo API acumulado:** {fmt_clp(row.get("costo_api", 0) or 0)}  
+"""
+    )
+
+
 # =========================================================
 # CARGA DE DATOS
 # =========================================================
@@ -247,7 +373,6 @@ def is_test_email(email: str) -> bool:
 def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
     full_json_path = ensure_full_json(DATA_DIR)
 
-    # Cognito users
     users_path = os.path.join(DATA_DIR, "cleaned_cognito_users.csv")
     try:
         df_users = pd.read_csv(users_path)
@@ -256,7 +381,6 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
     except Exception:
         df_users = pd.DataFrame()
 
-    # Conversations
     records = []
     if os.path.exists(full_json_path) and os.path.getsize(full_json_path) > 0:
         with open(full_json_path, "r", encoding="utf-8") as f:
@@ -313,14 +437,20 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
         df_conv["Mes"] = df_conv["Fecha_Local"].dt.to_period("M").astype(str)
 
         df_conv["DiaSemana"] = df_conv["Fecha_Local"].dt.day_name().map(
-            {"Monday": "Lunes", "Tuesday": "Martes", "Wednesday": "Miércoles", "Thursday": "Jueves",
-             "Friday": "Viernes", "Saturday": "Sábado", "Sunday": "Domingo"}
+            {
+                "Monday": "Lunes",
+                "Tuesday": "Martes",
+                "Wednesday": "Miércoles",
+                "Thursday": "Jueves",
+                "Friday": "Viernes",
+                "Saturday": "Sábado",
+                "Sunday": "Domingo",
+            }
         )
         df_conv["FranjaHoraria"] = df_conv["Fecha_Local"].dt.hour.apply(
             lambda x: "Mañana" if 5 <= x < 13 else "Tarde" if 13 <= x < 19 else "Noche"
         )
 
-    # Master merge
     if not df_conv.empty and not df_users.empty:
         df_master = pd.merge(df_conv, df_users, left_on="UserId", right_on="sub", how="left")
         df_master["region"] = df_master.get("region", "Desconocida").fillna("Desconocida")
@@ -332,7 +462,9 @@ def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
     else:
         df_master = df_conv.copy()
         if df_master.empty:
-            df_master = pd.DataFrame(columns=["UserId","Fecha_Local","Fecha_Dia","Mes","Titulo","Asignatura","TotalPriceUSD","Tokens"])
+            df_master = pd.DataFrame(
+                columns=["UserId", "Fecha_Local", "Fecha_Dia", "Mes", "Titulo", "Asignatura", "TotalPriceUSD", "Tokens"]
+            )
         df_master["region"] = df_master.get("region", "Desconocida")
         df_master["inst_clean"] = df_master.get("inst_clean", "NO ESPECIFICADO")
         df_master["jobTitle_norm"] = df_master.get("jobTitle_norm", "Otro Profesional")
@@ -354,7 +486,7 @@ st.markdown(
   <img src="{URL_LOGO}" alt="AI-LLIU"/>
   <div>
     <div class="title">Dashboard AI-LLIU (histórico)</div>
-    <div class="ai-sub">Indicadores de uso, adopción y costos (API + infraestructura).</div>
+    <div class="ai-sub">Indicadores de uso, adopción, costos y perfiles de usuario.</div>
   </div>
 </div>
 """,
@@ -425,31 +557,63 @@ if df.empty:
 df["Costo_API_CLP"] = df["TotalPriceUSD"].fillna(0.0).astype(float) * float(usd_clp)
 
 # =========================================================
-# USUARIOS (CUENTAS VS ACTIVOS VS HUMANOS)
+# USER STATS
 # =========================================================
 user_stats = (
     df.groupby("UserId")
-    .agg(conv=("Titulo", "size"), tokens=("Tokens", "sum"), costo_api=("Costo_API_CLP", "sum"))
+    .agg(
+        conv=("Titulo", "size"),
+        tokens=("Tokens", "sum"),
+        costo_api=("Costo_API_CLP", "sum"),
+        dias_activos=("Fecha_Dia", "nunique"),
+        meses_activos=("Mes", "nunique"),
+        primera_actividad=("Fecha_Local", "min"),
+        ultima_actividad=("Fecha_Local", "max"),
+        asignaturas_distintas=("Asignatura", "nunique"),
+    )
     .reset_index()
 )
 
-cols_possible = ["UserId", "email", "email_verified", "Enabled", "UserStatus", "jobTitle_norm", "inst_clean"]
+cols_possible = [
+    "UserId", "email", "email_verified", "Enabled", "UserStatus",
+    "jobTitle_norm", "inst_clean", "region",
+    "name", "Name", "full_name", "FullName", "display_name", "DisplayName",
+    "given_name", "family_name", "nombre", "Nombre"
+]
 present_cols = [c for c in cols_possible if c in df.columns]
+
 if present_cols:
     user_attrs = df[present_cols].drop_duplicates("UserId")
     user_stats = user_stats.merge(user_attrs, on="UserId", how="left")
+
+perfil_base = (
+    df.groupby("UserId")
+    .agg(
+        franja_predominante=("FranjaHoraria", horario_predominante),
+        asignatura_principal=("Asignatura", asignatura_predominante),
+    )
+    .reset_index()
+)
+
+user_stats = user_stats.merge(perfil_base, on="UserId", how="left")
+user_stats["perfil_uso"] = user_stats.apply(clasificar_perfil_usuario, axis=1)
 
 user_stats["humano_validado"] = True
 if "email" in user_stats.columns:
     user_stats.loc[user_stats["email"].apply(is_test_email), "humano_validado"] = False
 if "email_verified" in user_stats.columns:
     user_stats.loc[user_stats["email_verified"].astype(str).str.lower() != "true", "humano_validado"] = False
-
-# Umbral mínimo de actividad (reduce cuentas de prueba / intentos)
 user_stats.loc[(user_stats["conv"] < 2) & ((user_stats["tokens"].fillna(0)) < 800), "humano_validado"] = False
-
-# Anti-automatización simple (IDs con volumen extremo)
 user_stats.loc[user_stats["conv"] > 60, "humano_validado"] = False
+
+user_stats = user_stats.reset_index(drop=True)
+user_stats["nombre_visible"] = [
+    construir_nombre_visible(user_stats.iloc[i], i + 1) for i in range(len(user_stats))
+]
+
+user_stats["rol_mostrado"] = user_stats.get("jobTitle_norm", "No disponible").fillna("No disponible")
+user_stats["inst_mostrada"] = user_stats.get("inst_clean", "No disponible").fillna("No disponible")
+user_stats["region_mostrada"] = user_stats.get("region", "No disponible").fillna("No disponible")
 
 usuarios_activos = int(df["UserId"].nunique())
 usuarios_humanos = int(user_stats.loc[user_stats["humano_validado"], "UserId"].nunique())
@@ -494,9 +658,8 @@ prom_mensual_total = costo_total_rango / max(1, meses_en_rango)
 prom_mensual_api = costo_api_total / max(1, meses_en_rango)
 costo_por_humano_rango = costo_total_rango / max(1, usuarios_humanos)
 
-
 # =========================================================
-# KPIs (TÉCNICOS + ENCUADRE SEGURO)
+# 1) KPIs GENERALES
 # =========================================================
 st.markdown(
     f"""
@@ -537,7 +700,81 @@ st.markdown(
 )
 
 # =========================================================
-# COSTOS
+# 2) USO Y TENDENCIAS GENERALES
+# =========================================================
+st.markdown("### Uso y tendencias generales")
+
+u1, u2 = st.columns([1.0, 1.0], gap="large")
+with u1:
+    daily = df.groupby("Fecha_Dia").agg(
+        interacciones=("Titulo", "size"),
+        usuarios=("UserId", "nunique")
+    ).reset_index()
+
+    figu = px.line(
+        daily,
+        x="Fecha_Dia",
+        y=["interacciones", "usuarios"],
+        title="Evolución diaria (interacciones y usuarios)",
+    )
+    figu.update_layout(**PLOT_LAYOUT, legend=dict(orientation="h", y=1.15))
+    st.plotly_chart(figu, use_container_width=True)
+
+with u2:
+    hum_month_plot = monthly[["Mes", "usuarios_humanos"]].copy()
+    fig_hum = px.line(
+        hum_month_plot,
+        x="Mes",
+        y="usuarios_humanos",
+        markers=True,
+        title="Usuarios humanos por mes",
+    )
+    fig_hum.update_layout(**PLOT_LAYOUT)
+    fig_hum.update_yaxes(title="Usuarios")
+    st.plotly_chart(fig_hum, use_container_width=True)
+
+u3, u4 = st.columns([1.0, 1.0], gap="large")
+with u3:
+    heat = df.groupby(["DiaSemana", "FranjaHoraria"]).size().reset_index(name="conteo")
+    orden_dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    orden_franjas = ["Mañana", "Tarde", "Noche"]
+    heat["DiaSemana"] = pd.Categorical(heat["DiaSemana"], categories=orden_dias, ordered=True)
+    heat["FranjaHoraria"] = pd.Categorical(heat["FranjaHoraria"], categories=orden_franjas, ordered=True)
+    pivot = heat.pivot_table(
+        index="DiaSemana",
+        columns="FranjaHoraria",
+        values="conteo",
+        fill_value=0,
+        observed=False
+    ).loc[orden_dias, orden_franjas]
+
+    fig_h = px.imshow(
+        pivot,
+        text_auto=True,
+        aspect="auto",
+        title="Intensidad de uso (día vs franja horaria)"
+    )
+    fig_h.update_layout(**PLOT_LAYOUT)
+    st.plotly_chart(fig_h, use_container_width=True)
+
+with u4:
+    asig_top = (
+        df.groupby("Asignatura")
+        .size()
+        .reset_index(name="interacciones")
+        .sort_values("interacciones", ascending=False)
+    )
+    fig_asig_top = px.bar(
+        asig_top,
+        x="Asignatura",
+        y="interacciones",
+        title="Distribución general por asignatura"
+    )
+    fig_asig_top.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
+    st.plotly_chart(fig_asig_top, use_container_width=True)
+
+# =========================================================
+# 3) COSTOS
 # =========================================================
 st.markdown("### Costos mensuales (API + infraestructura)")
 
@@ -564,41 +801,194 @@ with c3:
     st.plotly_chart(fig3, use_container_width=True)
 
 with c4:
-    fig4 = px.line(monthly, x="Mes", y="usuarios_humanos", markers=True, title="Usuarios humanos por mes")
+    fig4 = px.line(monthly, x="Mes", y="costo_api", markers=True, title="Costo API mensual (CLP)")
     fig4.update_layout(**PLOT_LAYOUT)
-    fig4.update_yaxes(title="Usuarios")
+    fig4.update_yaxes(title="CLP")
     st.plotly_chart(fig4, use_container_width=True)
 
 # =========================================================
-# USO Y PATRONES
+# 4) SEGMENTACIÓN
 # =========================================================
-st.markdown("### Uso y patrones temporales")
+st.markdown("### Segmentación del uso")
 
-u1, u2 = st.columns([1.0, 1.0], gap="large")
-with u1:
-    daily = df.groupby("Fecha_Dia").agg(interacciones=("Titulo", "size"), usuarios=("UserId", "nunique")).reset_index()
-    figu = px.line(
-        daily,
-        x="Fecha_Dia",
-        y=["interacciones", "usuarios"],
-        title="Evolución diaria (interacciones y usuarios)",
+s1, s2 = st.columns([1.0, 1.0], gap="large")
+with s1:
+    dist_roles = (
+        df.groupby("jobTitle_norm")
+        .size()
+        .reset_index(name="interacciones")
+        .sort_values("interacciones", ascending=False)
     )
-    figu.update_layout(**PLOT_LAYOUT, legend=dict(orientation="h", y=1.15))
-    st.plotly_chart(figu, use_container_width=True)
+    fig_roles = px.bar(
+        dist_roles,
+        x="jobTitle_norm",
+        y="interacciones",
+        title="Distribución por rol",
+    )
+    fig_roles.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
+    st.plotly_chart(fig_roles, use_container_width=True)
 
-with u2:
-    heat = df.groupby(["DiaSemana", "FranjaHoraria"]).size().reset_index(name="conteo")
-    orden_dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-    orden_franjas = ["Mañana", "Tarde", "Noche"]
-    heat["DiaSemana"] = pd.Categorical(heat["DiaSemana"], categories=orden_dias, ordered=True)
-    heat["FranjaHoraria"] = pd.Categorical(heat["FranjaHoraria"], categories=orden_franjas, ordered=True)
-    pivot = heat.pivot_table(index="DiaSemana", columns="FranjaHoraria", values="conteo", fill_value=0).loc[orden_dias, orden_franjas]
-    fig_h = px.imshow(pivot, text_auto=True, aspect="auto", title="Intensidad de uso (día vs franja horaria)")
-    fig_h.update_layout(**PLOT_LAYOUT)
-    st.plotly_chart(fig_h, use_container_width=True)
+with s2:
+    dist_region = (
+        df.groupby("region")
+        .size()
+        .reset_index(name="interacciones")
+        .sort_values("interacciones", ascending=False)
+        .head(15)
+    )
+    fig_region = px.bar(
+        dist_region,
+        x="region",
+        y="interacciones",
+        title="Distribución por región",
+    )
+    fig_region.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
+    st.plotly_chart(fig_region, use_container_width=True)
+
+s3, s4 = st.columns([1.0, 1.0], gap="large")
+with s3:
+    dist_inst = (
+        df.groupby("inst_clean")
+        .size()
+        .reset_index(name="interacciones")
+        .sort_values("interacciones", ascending=False)
+        .head(15)
+    )
+    fig_inst = px.bar(
+        dist_inst,
+        x="inst_clean",
+        y="interacciones",
+        title="Top instituciones por interacción",
+    )
+    fig_inst.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
+    st.plotly_chart(fig_inst, use_container_width=True)
+
+with s4:
+    dist_franja = (
+        df.groupby("FranjaHoraria")
+        .size()
+        .reset_index(name="interacciones")
+        .sort_values("interacciones", ascending=False)
+    )
+    fig_franja = px.bar(
+        dist_franja,
+        x="FranjaHoraria",
+        y="interacciones",
+        title="Distribución por franja horaria",
+    )
+    fig_franja.update_layout(**PLOT_LAYOUT, xaxis_title="", yaxis_title="Interacciones")
+    st.plotly_chart(fig_franja, use_container_width=True)
 
 # =========================================================
-# TABLA RESUMEN
+# 5) USUARIOS DESTACADOS
+# =========================================================
+st.markdown("### Usuarios destacados y perfiles de uso")
+
+destacables = user_stats[user_stats["humano_validado"] == True].copy()
+
+if destacables.empty:
+    st.info("No hay usuarios humanos validados suficientes para construir destacados con los filtros actuales.")
+else:
+    top_conv = destacables.sort_values(["conv", "dias_activos"], ascending=[False, False]).head(1)
+    top_tokens = destacables.sort_values(["tokens", "conv"], ascending=[False, False]).head(1)
+    top_constante = destacables.sort_values(["dias_activos", "meses_activos", "conv"], ascending=[False, False, False]).head(1)
+    top_diverso = destacables.sort_values(["asignaturas_distintas", "conv"], ascending=[False, False]).head(1)
+
+    d1, d2 = st.columns(2, gap="large")
+    d3, d4 = st.columns(2, gap="large")
+
+    with d1:
+        render_destacado_card(
+            "Mayor volumen de interacción",
+            "Usuario con más conversaciones registradas en el período filtrado.",
+            top_conv.iloc[0]
+        )
+
+    with d2:
+        render_destacado_card(
+            "Mayor intensidad de uso",
+            "Usuario con mayor volumen acumulado de tokens.",
+            top_tokens.iloc[0]
+        )
+
+    with d3:
+        render_destacado_card(
+            "Mayor recurrencia temporal",
+            "Usuario con presencia más sostenida en días y meses activos.",
+            top_constante.iloc[0]
+        )
+
+    with d4:
+        render_destacado_card(
+            "Mayor diversidad curricular",
+            "Usuario con mayor variedad de asignaturas inferidas.",
+            top_diverso.iloc[0]
+        )
+
+    st.markdown("#### Explorador de perfiles")
+
+    opciones_usuario = destacables.sort_values("conv", ascending=False).copy()
+    opciones_usuario["label"] = opciones_usuario.apply(
+        lambda r: f"{safe_text(r.get('nombre_visible'))} · {safe_text(r.get('rol_mostrado'))} · {safe_text(r.get('inst_mostrada'))}",
+        axis=1
+    )
+
+    selected_label = st.selectbox(
+        "Seleccionar usuario validado",
+        opciones_usuario["label"].tolist()
+    )
+
+    usuario_sel = opciones_usuario[opciones_usuario["label"] == selected_label].iloc[0]
+    uid = usuario_sel["UserId"]
+
+    detalle = df[df["UserId"] == uid].copy()
+
+    col_a, col_b = st.columns([1.0, 1.1], gap="large")
+
+    with col_a:
+        st.markdown("##### Descripción del usuario")
+        st.write(
+            f"""
+**Nombre visible:** {safe_text(usuario_sel.get("nombre_visible"))}  
+**Perfil de uso:** {safe_text(usuario_sel.get("perfil_uso"))}  
+**Rol:** {safe_text(usuario_sel.get("rol_mostrado"))}  
+**Institución:** {safe_text(usuario_sel.get("inst_mostrada"))}  
+**Región:** {safe_text(usuario_sel.get("region_mostrada"))}  
+**Asignatura principal:** {safe_text(usuario_sel.get("asignatura_principal"))}  
+**Franja predominante:** {safe_text(usuario_sel.get("franja_predominante"))}  
+**Primera actividad:** {safe_text(usuario_sel.get("primera_actividad"))}  
+**Última actividad:** {safe_text(usuario_sel.get("ultima_actividad"))}  
+**Interacciones:** {int(usuario_sel.get("conv", 0))}  
+**Días activos:** {int(usuario_sel.get("dias_activos", 0))}  
+**Meses activos:** {int(usuario_sel.get("meses_activos", 0))}  
+**Asignaturas distintas:** {int(usuario_sel.get("asignaturas_distintas", 0))}  
+**Tokens acumulados:** {fmt_compact(usuario_sel.get("tokens", 0) or 0)}  
+**Costo API acumulado:** {fmt_clp(usuario_sel.get("costo_api", 0) or 0)}  
+"""
+        )
+
+    with col_b:
+        uso_mensual_usuario = (
+            detalle.groupby("Mes")
+            .agg(
+                interacciones=("Titulo", "size"),
+                tokens=("Tokens", "sum"),
+                costo_api=("Costo_API_CLP", "sum"),
+            )
+            .reset_index()
+        )
+
+        fig_user = px.line(
+            uso_mensual_usuario,
+            x="Mes",
+            y=["interacciones", "tokens"],
+            title="Evolución mensual del usuario",
+        )
+        fig_user.update_layout(**PLOT_LAYOUT, legend=dict(orientation="h", y=1.15))
+        st.plotly_chart(fig_user, use_container_width=True)
+
+# =========================================================
+# 6) RESUMEN MENSUAL
 # =========================================================
 st.markdown("### Resumen mensual")
 
@@ -623,5 +1013,6 @@ st.dataframe(table, use_container_width=True)
 st.caption(
     "Definiciones: 'Costo API' se estima desde TotalPrice (USD) convertido a CLP. "
     "'Costo infraestructura' corresponde a un componente fijo mensual parametrizable. "
-    "'Usuarios humanos validados' aplica reglas de depuración (emails de prueba, verificación y umbrales de actividad)."
+    "'Usuarios humanos validados' aplica reglas de depuración (emails de prueba, verificación y umbrales de actividad). "
+    "'Nombre visible' prioriza nombre explícito en la data; si no existe, usa el nickname derivado del correo; si tampoco existe, asigna un alias sintético."
 )
